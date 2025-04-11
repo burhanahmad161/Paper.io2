@@ -1,15 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : Character
 {
 	public float sensitivity = 300f;
 	public float turnTreshold = 15f;
 	private Vector3 mouseStartPos;
+	public TextMeshProUGUI text2;
+	public TextMeshProUGUI text3;
+	public TextMeshProUGUI text4;
+	public TextMeshProUGUI text5;
+	public TextMeshProUGUI text6;
+	public float value = 0f;
+	public float value2 = 0f;
+	public float value3 = 0f;
+	public float value4 = 0f;
+	public float value5 = 0f;
+	public GameObject collisionEffectPrefab; // Prefab for the collision effect
+	public GameObject trailShineEffectPrefab;
+	public GameObject trailCollisionPrefab;
+	private float lastShineTime = 0f;
 
 	public override void Update()
 	{
+		if (Time.time - lastShineTime >= 2f)
+		{
+			GameObject trailShineEffect = Instantiate(trailShineEffectPrefab, transform.position, Quaternion.identity);
+
+			// Parent the effect to the player so it moves with them
+			trailShineEffect.transform.SetParent(transform);
+
+			// Optionally unparent after 2 seconds and destroy it
+			StartCoroutine(DestroyAfterDelay(trailShineEffect, 2f));
+
+			lastShineTime = Time.time;
+		}
+
+		GameData.PlayerScore += 0.0010f; // increment every frame
+		text2.text = value.ToString("F2") + "%";// show 2 decimal places
+
+		value2 += 0.00001f; // increment every frame
+		text3.text = value2.ToString("F2") + "%";// show 2 decimal places
+
+		value3 += 0.00030f; // increment every frame
+		text4.text = value3.ToString("F2") + "%";// show 2 decimal places
+
+		value4 += 0.00040f; // increment every frame
+		text5.text = value4.ToString("F2") + "%";// show 2 decimal places
+
+		value5 += 0.00050f; // increment every frame
+		text6.text = value5.ToString("F2") + "%";// show 2 decimal places
 		var mousePos = Input.mousePosition;
 		if (Input.GetMouseButtonDown(0))
 		{
@@ -36,5 +79,30 @@ public class PlayerMovement : Character
 
 		base.Update();
 	}
+	// private void OnTriggerEnter(Collider other)
+	// {
+	// 	if (other.gameObject.CompareTag("PowerUps"))
+	// 	{
+	// 		//			Destroy the power-up object
+	// 		Destroy(other.gameObject);
 
+	// 		// Instantiate the collision effect prefab at the player's position
+	// 		if (collisionEffectPrefab != null)
+	// 		{
+	// 			GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
+	// 			Destroy(effect, 2f); // Destroy the effect after 2 seconds
+	// 		}
+	// 	}
+	// }
+	private IEnumerator DestroyAfterDelay(GameObject obj, float delay)
+	{
+		yield return new WaitForSeconds(delay);
+
+		// Unparent before destroying if needed
+		if (obj != null)
+		{
+			obj.transform.SetParent(null);
+			Destroy(obj);
+		}
+	}
 }

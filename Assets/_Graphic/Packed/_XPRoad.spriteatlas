@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: _XPRoad
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 1
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 75957a2a841144a038f617749daddce3, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 5ff2c2b1354c24f6db147b56cdc56847: 21300000
+    - 03feb48211f18496d9a0b31f2cf2120c: 21300000
+    - 2d58e0e2d6f81451ca8422af84e28b7d: 21300000
+    - 70bfc323988b04346918958b23e07378: 21300000
+    - a3a3b753063494b52b876d490199756c: 21300000
+    - 415cd0f416eec438db54a29925d0dcbd: 21300000
+    - 957ff13513e274abebc0b45338683b09: 21300000
+    - 87e05f5692a934984ae04972eaf30753: 21300000
+    - bd0b32c781b1149e3b1386dc82a6eb0a: 21300000
+    - 0fe8ed38b0f464ea19e38f0270bc76a1: 21300000
+    - 44e6bf2ba5d124b80885279ec58ad574: 21300000
+    - 61d9934c9ceb24e29afd9f313257436c: 21300000
+    - 282433fc46595478f9b48f735600c229: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 5ff2c2b1354c24f6db147b56cdc56847, type: 3}
+  - {fileID: 21300000, guid: 03feb48211f18496d9a0b31f2cf2120c, type: 3}
+  - {fileID: 21300000, guid: 2d58e0e2d6f81451ca8422af84e28b7d, type: 3}
+  - {fileID: 21300000, guid: 70bfc323988b04346918958b23e07378, type: 3}
+  - {fileID: 21300000, guid: a3a3b753063494b52b876d490199756c, type: 3}
+  - {fileID: 21300000, guid: 415cd0f416eec438db54a29925d0dcbd, type: 3}
+  - {fileID: 21300000, guid: 957ff13513e274abebc0b45338683b09, type: 3}
+  - {fileID: 21300000, guid: 87e05f5692a934984ae04972eaf30753, type: 3}
+  - {fileID: 21300000, guid: bd0b32c781b1149e3b1386dc82a6eb0a, type: 3}
+  - {fileID: 21300000, guid: 0fe8ed38b0f464ea19e38f0270bc76a1, type: 3}
+  - {fileID: 21300000, guid: 44e6bf2ba5d124b80885279ec58ad574, type: 3}
+  - {fileID: 21300000, guid: 61d9934c9ceb24e29afd9f313257436c, type: 3}
+  - {fileID: 21300000, guid: 282433fc46595478f9b48f735600c229, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - header_leaderboard
+  - leaderboard_panel
+  - medal_gold
+  - inner_shadow_leaderboard_panel
+  - podium_bronze
+  - medal_silver
+  - panel_mask
+  - outline_leaderboard_panel
+  - icon_leaderboard
+  - podium_silver
+  - podium_gold
+  - medal_bronze
+  - icon_leaderboard_outline
+  m_RenderDataMap: {}
+  m_Tag: _XPRoad
+  m_IsVariant: 0

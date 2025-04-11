@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: _BattleRoyale
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 1
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 2e52f948615fb40408168f08e0648dce, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - feee9f800a0f19942b35750b942e215e: 21300000
+    - a8c235b13e6d2416ba28ba590a233c13: 21300000
+    - a7565a12ea6c5479cb3db95aa9162bee: 21300000
+    - 0afb80320bc6e4cc0a1672b0369a5abc: 21300000
+    - 40f893d2faa5ee542ae97f8ce5e13e1d: 21300000
+    - b9d30f1320bf045cf9294568319180e6: 21300000
+    - b4fdf6044a72e470691292fada5718c4: 21300000
+    - a766948426ebc4dfcb061f66099ead66: 21300000
+    - fd2750f419c7a446ab295c9e944e2252: 21300000
+    - 1a1c44869ef0d48d593f23ce54d30feb: 21300000
+    - 4149d3a6ee22347cf902d3a72162275b: 21300000
+    - b20eb837eaf6646b79aa1c3d9cec33cf: 21300000
+    - 9a5c6b37fc9264f858875bf313a4761f: 21300000
+    - 8094e1c969ce744f480ac13f21c2fdd9: 21300000
+    - bb4b052a7329d4feca7b816ca4b84b22: 21300000
+    - f5ee1c8b554834575b46006ee593bf6f: 21300000
+    - 05517bcbedb21a64aa0a1ee6d683518f: 21300000
+    - ab6b6d4c25a3bda4abded81d77db8f30: 21300000
+    - a852e57ce7f5e49e895d1c75d0f1f4a7: 21300000
+    - 27ff6dcc628e643f58632446732ef4b0: 21300000
+    - 18991cecadc4d436e8a5a59887d11547: 21300000
+    - ffb0144d5b63d8b43912f514f1f0cecb: 21300000
+    - 23745b0e4d91c4c6d952e41b3d3c59a1: 21300000
+    - 693c633e44d4b13479dd887c60e7a571: 21300000
+    - 2a5c998f413c94546906ef7dad6499fc: 21300000
+    - 321128ff10ce2430daa5f1cb1384d844: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: feee9f800a0f19942b35750b942e215e, type: 3}
+  - {fileID: 21300000, guid: a8c235b13e6d2416ba28ba590a233c13, type: 3}
+  - {fileID: 21300000, guid: a7565a12ea6c5479cb3db95aa9162bee, type: 3}
+  - {fileID: 21300000, guid: 0afb80320bc6e4cc0a1672b0369a5abc, type: 3}
+  - {fileID: 21300000, guid: 40f893d2faa5ee542ae97f8ce5e13e1d, type: 3}
+  - {fileID: 21300000, guid: b9d30f1320bf045cf9294568319180e6, type: 3}
+  - {fileID: 21300000, guid: b4fdf6044a72e470691292fada5718c4, type: 3}
+  - {fileID: 21300000, guid: a766948426ebc4dfcb061f66099ead66, type: 3}
+  - {fileID: 21300000, guid: fd2750f419c7a446ab295c9e944e2252, type: 3}
+  - {fileID: 21300000, guid: 1a1c44869ef0d48d593f23ce54d30feb, type: 3}
+  - {fileID: 21300000, guid: 4149d3a6ee22347cf902d3a72162275b, type: 3}
+  - {fileID: 21300000, guid: b20eb837eaf6646b79aa1c3d9cec33cf, type: 3}
+  - {fileID: 21300000, guid: 9a5c6b37fc9264f858875bf313a4761f, type: 3}
+  - {fileID: 21300000, guid: 8094e1c969ce744f480ac13f21c2fdd9, type: 3}
+  - {fileID: 21300000, guid: bb4b052a7329d4feca7b816ca4b84b22, type: 3}
+  - {fileID: 21300000, guid: f5ee1c8b554834575b46006ee593bf6f, type: 3}
+  - {fileID: 21300000, guid: 05517bcbedb21a64aa0a1ee6d683518f, type: 3}
+  - {fileID: 21300000, guid: ab6b6d4c25a3bda4abded81d77db8f30, type: 3}
+  - {fileID: 21300000, guid: a852e57ce7f5e49e895d1c75d0f1f4a7, type: 3}
+  - {fileID: 21300000, guid: 27ff6dcc628e643f58632446732ef4b0, type: 3}
+  - {fileID: 21300000, guid: 18991cecadc4d436e8a5a59887d11547, type: 3}
+  - {fileID: 21300000, guid: ffb0144d5b63d8b43912f514f1f0cecb, type: 3}
+  - {fileID: 21300000, guid: 23745b0e4d91c4c6d952e41b3d3c59a1, type: 3}
+  - {fileID: 21300000, guid: 693c633e44d4b13479dd887c60e7a571, type: 3}
+  - {fileID: 21300000, guid: 2a5c998f413c94546906ef7dad6499fc, type: 3}
+  - {fileID: 21300000, guid: 321128ff10ce2430daa5f1cb1384d844, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Leaderboard_Merged_2
+  - spritesheet_flame_fx_white
+  - br_title_skull_1
+  - bubble_fill
+  - Leaderboard_Merged_4
+  - br_title_paper
+  - br_bkg_leaderboard
+  - icon_players
+  - leaderboard_panel
+  - podium_gold
+  - podium_bronze
+  - icon_skull_dead
+  - br_title_skull_2
+  - br_title_royale
+  - bubble_danger
+  - inner_shadow_leaderboard_panel
+  - Leaderboard_Merged_1
+  - icon_skull 1
+  - spritesheet_flame_fx
+  - br_title_skull_trail
+  - outline_leaderboard_panel
+  - Mask_Circle
+  - br_btn_leaderboard
+  - Leaderboard_Merged_3
+  - br_title_explosion
+  - podium_silver
+  m_RenderDataMap: {}
+  m_Tag: _BattleRoyale
+  m_IsVariant: 0

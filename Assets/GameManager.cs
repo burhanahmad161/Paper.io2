@@ -131,4 +131,8 @@ public class GameManager : MonoBehaviour
 		}
 		return inside;
 	}
+	private void StartAgain()
+	{
+		SceneManager.LoadScene(0);
+	}
 }

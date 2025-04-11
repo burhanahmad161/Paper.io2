@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Character : MonoBehaviour
 {
@@ -34,7 +35,20 @@ public class Character : MonoBehaviour
 	protected Rigidbody rb;
 	protected Vector3 curDir;
 	protected Quaternion targetRot;
+	private GameObject collisionEffectPrefab;
+	private GameObject trailCollisionPrefab;
 
+	// Collision Animations
+	// void Start()
+	// {
+	//     // Get the PlayerMovement component from the same GameObject
+	//     PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+
+	//     if (playerMovement != null)
+	//     {
+	//         collisionEffectPrefab = playerMovement.collisionEffectPrefab;
+	//     }
+	// }
 	private void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -46,6 +60,14 @@ public class Character : MonoBehaviour
 	public virtual void Start()
 	{
 		InitializeCharacter();
+		// Get the PlayerMovement component from the same GameObject
+		PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+
+		if (playerMovement != null)
+		{
+			collisionEffectPrefab = playerMovement.collisionEffectPrefab;
+			trailCollisionPrefab = playerMovement.trailCollisionPrefab;
+		}
 	}
 
 	public virtual void Update()
@@ -91,11 +113,11 @@ public class Character : MonoBehaviour
 		else if (count > 0)
 		{
 			GameManager.DeformCharacterArea(this, newAreaVertices);
-			
-			foreach(var character in attackedCharacters)
+
+			foreach (var character in attackedCharacters)
 			{
 				List<Vector3> newCharacterAreaVertices = new List<Vector3>();
-				foreach(var vertex in newAreaVertices)
+				foreach (var vertex in newAreaVertices)
 				{
 					if (GameManager.IsPointInPolygon(new Vector2(vertex.x, vertex.z), Vertices2D(character.areaVertices)))
 					{
@@ -112,7 +134,7 @@ public class Character : MonoBehaviour
 			{
 				trail.Clear();
 				trail.emitting = false;
-			}			
+			}
 			foreach (var trailColl in trailColls)
 			{
 				Destroy(trailColl);
@@ -128,7 +150,7 @@ public class Character : MonoBehaviour
 		if (curDir != Vector3.zero)
 		{
 			targetRot = Quaternion.LookRotation(curDir);
-			if(rb.rotation != targetRot)
+			if (rb.rotation != targetRot)
 			{
 				rb.rotation = Quaternion.RotateTowards(rb.rotation, targetRot, turnSpeed);
 			}
@@ -222,9 +244,22 @@ public class Character : MonoBehaviour
 
 		return closest;
 	}
-
 	private void OnTriggerEnter(Collider other)
 	{
+		if (other.gameObject.CompareTag("PowerUps"))
+		{
+			//			Destroy the power-up object
+			Destroy(other.gameObject);
+
+			// Instantiate the collision effect prefab at the player's position
+			if (collisionEffectPrefab != null)
+			{
+				GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
+				Destroy(effect, 2f); // Destroy the effect after 2 seconds
+			}
+		}
+		Debug.Log($"{gameObject.name} triggered with {other.gameObject.name}");
+
 		CharacterArea characterArea = other.GetComponent<CharacterArea>();
 		if (characterArea && characterArea != area && !attackedCharacters.Contains(characterArea.character))
 		{
@@ -234,7 +269,96 @@ public class Character : MonoBehaviour
 		if (other.gameObject.layer == 8)
 		{
 			characterArea = other.transform.parent.GetComponent<CharacterArea>();
-			characterArea.character.Die();
+			if (characterArea != null && characterArea.character != null)
+			{
+				Character otherCharacter = characterArea.character;
+
+				// ✅ Only trigger Game Over if the other character hits FlopCoat (this one)
+				if (characterName == "FlopCoat" && otherCharacter.characterName != "FlopCoat")
+				{
+					// FlopCoat collided with someone else → Do NOT trigger Game Over
+					Debug.Log("FlopCoat hit someone — no Game Over.");
+					GameObject effect = Instantiate(trailCollisionPrefab, transform.position, Quaternion.identity);
+					Destroy(effect, 2f); // Destroy the effect after 2 seconds
+				}
+				else if (characterName != "FlopCoat" && otherCharacter.characterName == "FlopCoat")
+				{
+					// Any character collided with FlopCoat → Game Over
+					Debug.Log("FlopCoat has been hit! Game Over.");
+					SceneManager.LoadScene(1); // Replace with your actual scene name
+					return;
+				}
+				// Mix colors of both characters
+				Color myColor = trail != null ? trail.material.color : Color.white;
+				Color otherColor = otherCharacter.trail != null ? otherCharacter.trail.material.color : Color.white;
+				Color mixedColor = MixColors(myColor, otherColor);
+
+				//if (trail != null) trail.material.color = mixedColor;
+				if (otherCharacter.trail != null) otherCharacter.trail.material.color = mixedColor;
+				ChangeCharacterColor(otherCharacter.gameObject, mixedColor);
+				ChangeCharacterAreaColor(otherCharacter, mixedColor);
+				StopCharacterMovement(otherCharacter.gameObject);
+
+				Debug.Log($"{characterName} and {otherCharacter.characterName} collided — mixed color applied.");
+			}
+		}
+	}
+
+
+	Color MixColors(Color color1, Color color2)
+	{
+		float h1, s1, v1;
+		float h2, s2, v2;
+
+		// Convert both to HSV
+		Color.RGBToHSV(color1, out h1, out s1, out v1);
+		Color.RGBToHSV(color2, out h2, out s2, out v2);
+
+		// Average hue, saturation, and value
+		float mixedH = (h1 + h2) / 2f;
+		float mixedS = (s1 + s2) / 2f;
+		float mixedV = (v1 + v2) / 2f;
+
+		return Color.HSVToRGB(mixedH, mixedS, mixedV);
+	}
+
+	void ChangeCharacterColor(GameObject character, Color color)
+	{
+		Renderer[] renderers = character.GetComponentsInChildren<Renderer>();
+		foreach (Renderer renderer in renderers)
+		{
+			renderer.material.color = color;
+		}
+	}
+
+	void StopCharacterMovement(GameObject character)
+	{
+		EnemyMovement movementScript = character.GetComponent<EnemyMovement>();
+		if (movementScript != null)
+		{
+			movementScript.enabled = false;
+		}
+
+		Rigidbody rb = character.GetComponent<Rigidbody>();
+		if (rb != null)
+		{
+			rb.velocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
+			rb.isKinematic = true;
+			Destroy(rb);
+		}
+	}
+
+	void ChangeCharacterAreaColor(Character character, Color color)
+	{
+		if (character.areaMeshRend != null)
+		{
+			character.areaMeshRend.material.color = color;
+		}
+
+		if (character.areaOutlineMeshRend != null)
+		{
+			character.areaOutlineMeshRend.material.color = new Color(color.r * 0.7f, color.g * 0.7f, color.b * 0.7f);
 		}
 	}
 
