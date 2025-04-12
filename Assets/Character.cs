@@ -261,6 +261,7 @@ public class Character : MonoBehaviour
 		Debug.Log($"{gameObject.name} triggered with {other.gameObject.name}");
 
 		CharacterArea characterArea = other.GetComponent<CharacterArea>();
+
 		if (characterArea && characterArea != area && !attackedCharacters.Contains(characterArea.character))
 		{
 			attackedCharacters.Add(characterArea.character);
@@ -288,6 +289,12 @@ public class Character : MonoBehaviour
 					SceneManager.LoadScene(1); // Replace with your actual scene name
 					return;
 				}
+				else if (characterName == "FlopCoat" && otherCharacter.characterName == "FlopCoat")
+				{
+					Debug.Log("Two FlopCoats collided — no Game Over.");
+					SceneManager.LoadScene(1); // Replace with your actual scene name
+					return;
+				}
 				// Mix colors of both characters
 				Color myColor = trail != null ? trail.material.color : Color.white;
 				Color otherColor = otherCharacter.trail != null ? otherCharacter.trail.material.color : Color.white;
@@ -298,7 +305,7 @@ public class Character : MonoBehaviour
 				ChangeCharacterColor(otherCharacter.gameObject, mixedColor);
 				ChangeCharacterAreaColor(otherCharacter, mixedColor);
 				StopCharacterMovement(otherCharacter.gameObject);
-
+				Destroy(otherCharacter.area.gameObject);
 				Debug.Log($"{characterName} and {otherCharacter.characterName} collided — mixed color applied.");
 			}
 		}
