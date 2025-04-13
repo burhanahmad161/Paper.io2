@@ -277,6 +277,10 @@ public class Character : MonoBehaviour
 				// ✅ Only trigger Game Over if the other character hits FlopCoat (this one)
 				if (characterName == "FlopCoat" && otherCharacter.characterName != "FlopCoat")
 				{
+					// Move only the character downwards slightly
+					Vector3 offset = new Vector3(0, -2.5f, 0);
+					otherCharacter.transform.position += offset;
+
 					// FlopCoat collided with someone else → Do NOT trigger Game Over
 					Debug.Log("FlopCoat hit someone — no Game Over.");
 					GameObject effect = Instantiate(trailCollisionPrefab, transform.position, Quaternion.identity);
