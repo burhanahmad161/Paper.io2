@@ -12,7 +12,7 @@ public class Character : MonoBehaviour
 	public List<Character> attackedCharacters = new List<Character>();
 
 	[Header("Area")]
-	public int startAreaPoints = 45;
+	public int startAreaPoints = 100;
 	public float startAreaRadius = 3f;
 	public float minPointDistance = 0.1f;
 	public CharacterArea area;
@@ -37,18 +37,14 @@ public class Character : MonoBehaviour
 	protected Quaternion targetRot;
 	private GameObject collisionEffectPrefab;
 	private GameObject trailCollisionPrefab;
+	private GameObject enemyDeathPrefab;
+	private GameObject FastSpeedPrefab;
+	private GameObject AreaCrossingPrefab;
+	public float speedBoostAmount = 2f;      // How much to increase the speed
+	public float speedBoostDuration = 10f;   // How long the boost lasts (in seconds)
+	private bool isSpeedBoosted = false;
 
-	// Collision Animations
-	// void Start()
-	// {
-	//     // Get the PlayerMovement component from the same GameObject
-	//     PlayerMovement playerMovement = GetComponent<PlayerMovement>();
 
-	//     if (playerMovement != null)
-	//     {
-	//         collisionEffectPrefab = playerMovement.collisionEffectPrefab;
-	//     }
-	// }
 	private void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -67,6 +63,9 @@ public class Character : MonoBehaviour
 		{
 			collisionEffectPrefab = playerMovement.collisionEffectPrefab;
 			trailCollisionPrefab = playerMovement.trailCollisionPrefab;
+			enemyDeathPrefab = playerMovement.enemyDeathPrefab;
+			FastSpeedPrefab = playerMovement.FastSpeedPrefab;
+			AreaCrossingPrefab = playerMovement.AreaCrossingPrefab;
 		}
 	}
 
@@ -74,7 +73,7 @@ public class Character : MonoBehaviour
 	{
 		var trans = transform;
 		var transPos = trans.position;
-		trans.position = Vector3.ClampMagnitude(transPos, 24.5f);
+		trans.position = Vector3.ClampMagnitude(transPos, 73.5f);
 		bool isOutside = !GameManager.IsPointInPolygon(new Vector2(transPos.x, transPos.z), Vertices2D(areaVertices));
 		int count = newAreaVertices.Count;
 
@@ -246,18 +245,29 @@ public class Character : MonoBehaviour
 	}
 	private void OnTriggerEnter(Collider other)
 	{
+		//............................................................................
 		if (other.gameObject.CompareTag("PowerUps"))
 		{
-			//			Destroy the power-up object
 			Destroy(other.gameObject);
 
-			// Instantiate the collision effect prefab at the player's position
 			if (collisionEffectPrefab != null)
 			{
 				GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
 				Destroy(effect, 2f); // Destroy the effect after 2 seconds
 			}
+
+			if (!isSpeedBoosted)
+			{
+				StartCoroutine(SpeedBoost());
+				GameObject effect = Instantiate(FastSpeedPrefab, transform.position, Quaternion.identity);
+				effect.transform.SetParent(transform);
+
+				// Optionally reset local position if needed
+				effect.transform.localPosition = Vector3.zero;
+				Destroy(effect, 10f); // Destroy the effect after 2 seconds
+			}
 		}
+
 		Debug.Log($"{gameObject.name} triggered with {other.gameObject.name}");
 
 		CharacterArea characterArea = other.GetComponent<CharacterArea>();
@@ -266,7 +276,18 @@ public class Character : MonoBehaviour
 		{
 			attackedCharacters.Add(characterArea.character);
 		}
+		// Initiate an effect when player enters a character area
+		if (other.gameObject.layer == 8 && other.gameObject.CompareTag("Player"))
+		{
+			GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
+			Destroy(effect, 2f); // Destroy the effect after 2 seconds
 
+		}
+		if(other.gameObject.layer == 12)
+		{
+			GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
+			Destroy(effect, 2f); // Destroy the effect after 2 seconds
+		}
 		if (other.gameObject.layer == 8)
 		{
 			characterArea = other.transform.parent.GetComponent<CharacterArea>();
@@ -274,42 +295,34 @@ public class Character : MonoBehaviour
 			{
 				Character otherCharacter = characterArea.character;
 
-				// ✅ Only trigger Game Over if the other character hits FlopCoat (this one)
 				if (characterName == "FlopCoat" && otherCharacter.characterName != "FlopCoat")
 				{
-					// Move only the character downwards slightly
+					GameObject effetc2 = Instantiate(enemyDeathPrefab, otherCharacter.transform.position, Quaternion.identity);
 					Vector3 offset = new Vector3(0, -2.5f, 0);
 					otherCharacter.transform.position += offset;
-
-					// FlopCoat collided with someone else → Do NOT trigger Game Over
-					Debug.Log("FlopCoat hit someone — no Game Over.");
+					Destroy(effetc2, 2f);
 					GameObject effect = Instantiate(trailCollisionPrefab, transform.position, Quaternion.identity);
-					Destroy(effect, 2f); // Destroy the effect after 2 seconds
+					Destroy(effect, 2f);
+					other.gameObject.layer = 12;
 				}
 				else if (characterName != "FlopCoat" && otherCharacter.characterName == "FlopCoat")
 				{
-					// Any character collided with FlopCoat → Game Over
-					Debug.Log("FlopCoat has been hit! Game Over.");
-					SceneManager.LoadScene(1); // Replace with your actual scene name
+					SceneManager.LoadScene(1);
 					return;
 				}
 				else if (characterName == "FlopCoat" && otherCharacter.characterName == "FlopCoat")
 				{
-					Debug.Log("Two FlopCoats collided — no Game Over.");
-					SceneManager.LoadScene(1); // Replace with your actual scene name
+					SceneManager.LoadScene(1);
 					return;
 				}
-				// Mix colors of both characters
 				Color myColor = trail != null ? trail.material.color : Color.white;
 				Color otherColor = otherCharacter.trail != null ? otherCharacter.trail.material.color : Color.white;
 				Color mixedColor = MixColors(myColor, otherColor);
 
-				//if (trail != null) trail.material.color = mixedColor;
 				if (otherCharacter.trail != null) otherCharacter.trail.material.color = mixedColor;
 				ChangeCharacterColor(otherCharacter.gameObject, mixedColor);
 				ChangeCharacterAreaColor(otherCharacter, mixedColor);
 				StopCharacterMovement(otherCharacter.gameObject);
-				Destroy(otherCharacter.area.gameObject);
 				Debug.Log($"{characterName} and {otherCharacter.characterName} collided — mixed color applied.");
 			}
 		}
@@ -386,5 +399,17 @@ public class Character : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
+	private IEnumerator SpeedBoost()
+	{
+		isSpeedBoosted = true;
+		speed *= speedBoostAmount;  // `moveSpeed` should be the variable controlling movement speed
+
+		yield return new WaitForSeconds(speedBoostDuration);
+
+		speed /= speedBoostAmount;  // Revert speed back to normal
+		isSpeedBoosted = false;
+	}
+
+
 
 }

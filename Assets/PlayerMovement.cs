@@ -22,10 +22,16 @@ public class PlayerMovement : Character
 	public GameObject collisionEffectPrefab; // Prefab for the collision effect
 	public GameObject trailShineEffectPrefab;
 	public GameObject trailCollisionPrefab;
+	public GameObject enemyDeathPrefab;
+	public GameObject FastSpeedPrefab;
+	public GameObject AreaCrossingPrefab;
 	private float lastShineTime = 0f;
+	public float rotationSpeed = 90f; // degrees per second
+
 
 	public override void Update()
 	{
+
 		if (Time.time - lastShineTime >= 2f)
 		{
 			GameObject trailShineEffect = Instantiate(trailShineEffectPrefab, transform.position, Quaternion.identity);
@@ -79,26 +85,9 @@ public class PlayerMovement : Character
 
 		base.Update();
 	}
-	// private void OnTriggerEnter(Collider other)
-	// {
-	// 	if (other.gameObject.CompareTag("PowerUps"))
-	// 	{
-	// 		//			Destroy the power-up object
-	// 		Destroy(other.gameObject);
-
-	// 		// Instantiate the collision effect prefab at the player's position
-	// 		if (collisionEffectPrefab != null)
-	// 		{
-	// 			GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
-	// 			Destroy(effect, 2f); // Destroy the effect after 2 seconds
-	// 		}
-	// 	}
-	// }
 	private IEnumerator DestroyAfterDelay(GameObject obj, float delay)
 	{
 		yield return new WaitForSeconds(delay);
-
-		// Unparent before destroying if needed
 		if (obj != null)
 		{
 			obj.transform.SetParent(null);
