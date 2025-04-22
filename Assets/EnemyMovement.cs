@@ -23,7 +23,7 @@ public class EnemyMovement : Character
 			if (curPosition < positionsTillReturning)
 			{
 				curPosition++;
-				var targetPos2D = 24.5f * Random.insideUnitCircle;
+				var targetPos2D = 8.5f * Random.insideUnitCircle;
 				targetPos = new Vector3(targetPos2D.x, 0, targetPos2D.y);
 			}
 			else
@@ -32,9 +32,7 @@ public class EnemyMovement : Character
 				targetPos = areaVertices[GetClosestAreaVertice(transPos)];
 			}
 		}
-
 		curDir = (targetPos - transPos).normalized;
-
 		base.Update();
 	}
 }

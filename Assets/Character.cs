@@ -40,13 +40,15 @@ public class Character : MonoBehaviour
 	private GameObject enemyDeathPrefab;
 	private GameObject FastSpeedPrefab;
 	private GameObject AreaCrossingPrefab;
+	public GameObject PlayerDeathPrefab;
 	public float speedBoostAmount = 2f;      // How much to increase the speed
 	public float speedBoostDuration = 10f;   // How long the boost lasts (in seconds)
 	private bool isSpeedBoosted = false;
-
+	bool isMoving = false;
 
 	private void Awake()
 	{
+
 		rb = GetComponent<Rigidbody>();
 		trail = transform.Find("Trail").GetComponent<TrailRenderer>();
 		trail.material.color = new Color(color.r, color.g, color.b, 0.65f);
@@ -66,6 +68,7 @@ public class Character : MonoBehaviour
 			enemyDeathPrefab = playerMovement.enemyDeathPrefab;
 			FastSpeedPrefab = playerMovement.FastSpeedPrefab;
 			AreaCrossingPrefab = playerMovement.AreaCrossingPrefab;
+			PlayerDeathPrefab = playerMovement.PlayerDeathPrefab;
 		}
 	}
 
@@ -276,14 +279,13 @@ public class Character : MonoBehaviour
 		{
 			attackedCharacters.Add(characterArea.character);
 		}
-		// Initiate an effect when player enters a character area
+		//		Initiate an effect when player enters a character area
 		if (other.gameObject.layer == 8 && other.gameObject.CompareTag("Player"))
 		{
 			GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
 			Destroy(effect, 2f); // Destroy the effect after 2 seconds
-
 		}
-		if(other.gameObject.layer == 12)
+		if (other.gameObject.layer == 12)
 		{
 			GameObject effect = Instantiate(collisionEffectPrefab, transform.position, Quaternion.identity);
 			Destroy(effect, 2f); // Destroy the effect after 2 seconds
@@ -297,22 +299,40 @@ public class Character : MonoBehaviour
 
 				if (characterName == "FlopCoat" && otherCharacter.characterName != "FlopCoat")
 				{
+					Debug.Log($"{characterName} collided with {otherCharacter.characterName} — FlopCoat is dead.");
+
 					GameObject effetc2 = Instantiate(enemyDeathPrefab, otherCharacter.transform.position, Quaternion.identity);
+
 					Vector3 offset = new Vector3(0, -2.5f, 0);
 					otherCharacter.transform.position += offset;
 					Destroy(effetc2, 2f);
+
 					GameObject effect = Instantiate(trailCollisionPrefab, transform.position, Quaternion.identity);
 					Destroy(effect, 2f);
 					other.gameObject.layer = 12;
 				}
 				else if (characterName != "FlopCoat" && otherCharacter.characterName == "FlopCoat")
 				{
-					SceneManager.LoadScene(1);
+					Debug.Log(characterName + " collided with " + otherCharacter.characterName + " — FlopCoat is dead.");
+					GameObject effect = Instantiate(PlayerDeathPrefab, transform.position, Quaternion.identity);
+					Destroy(effect, 2f);
+					Vector3 offset = new Vector3(0, -2.5f, 0);
+					transform.position += offset;
+					StartCoroutine(TimerDelay(3f));
+					StopCharacterMovement(otherCharacter.gameObject);
+					//					SceneManager.LoadScene(1);
 					return;
 				}
 				else if (characterName == "FlopCoat" && otherCharacter.characterName == "FlopCoat")
 				{
-					SceneManager.LoadScene(1);
+					Debug.Log(characterName + " collided with " + otherCharacter.characterName + " — FlopCoat is dead.");
+					GameObject effect = Instantiate(PlayerDeathPrefab, otherCharacter.transform.position, Quaternion.identity);
+					Destroy(effect, 2f);
+					Vector3 offset = new Vector3(0, -2.5f, 0);
+					transform.position += offset;
+					StartCoroutine(TimerDelay(3f));
+					StopCharacterMovement(otherCharacter.gameObject);
+					//SceneManager.LoadScene(1);
 					return;
 				}
 				Color myColor = trail != null ? trail.material.color : Color.white;
@@ -320,6 +340,11 @@ public class Character : MonoBehaviour
 				Color mixedColor = MixColors(myColor, otherColor);
 
 				if (otherCharacter.trail != null) otherCharacter.trail.material.color = mixedColor;
+				
+				//Change Player Area Color
+				ChangeCharacterColor(gameObject, mixedColor);
+				ChangeCharacterAreaColor(this, mixedColor);
+				// Change Enemy Color
 				ChangeCharacterColor(otherCharacter.gameObject, mixedColor);
 				ChangeCharacterAreaColor(otherCharacter, mixedColor);
 				StopCharacterMovement(otherCharacter.gameObject);
@@ -327,8 +352,11 @@ public class Character : MonoBehaviour
 			}
 		}
 	}
-
-
+	private IEnumerator TimerDelay(float delay)
+	{
+		yield return new WaitForSeconds(delay);
+		SceneManager.LoadScene(1);
+	}
 	Color MixColors(Color color1, Color color2)
 	{
 		float h1, s1, v1;
@@ -372,7 +400,6 @@ public class Character : MonoBehaviour
 			Destroy(rb);
 		}
 	}
-
 	void ChangeCharacterAreaColor(Character character, Color color)
 	{
 		if (character.areaMeshRend != null)
@@ -385,7 +412,6 @@ public class Character : MonoBehaviour
 			character.areaOutlineMeshRend.material.color = new Color(color.r * 0.7f, color.g * 0.7f, color.b * 0.7f);
 		}
 	}
-
 	public void Die()
 	{
 		if (player)
@@ -409,7 +435,4 @@ public class Character : MonoBehaviour
 		speed /= speedBoostAmount;  // Revert speed back to normal
 		isSpeedBoosted = false;
 	}
-
-
-
 }

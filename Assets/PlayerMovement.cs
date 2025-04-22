@@ -25,6 +25,7 @@ public class PlayerMovement : Character
 	public GameObject enemyDeathPrefab;
 	public GameObject FastSpeedPrefab;
 	public GameObject AreaCrossingPrefab;
+	public GameObject PlayerDeathPrefab;
 	private float lastShineTime = 0f;
 	public float rotationSpeed = 90f; // degrees per second
 
